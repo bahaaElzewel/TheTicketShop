@@ -9,6 +9,8 @@
   <ItemGroup>
     <PackageReference Include="automapper" Version="13.0.1" />
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />
+    <PackageReference Include="serilog" Version="3.1.1" />
+    <PackageReference Include="serilog.aspnetcore" Version="8.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 

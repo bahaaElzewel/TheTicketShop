@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
+using Serilog;
 using TheTicketShop.DTOs;
 using TheTicketShop.Utility;
 
@@ -47,6 +48,7 @@ public class BaseService : IBaseService
 
             HttpResponseMessage apiResponse = null;
             apiResponse = await client.SendAsync(message);
+            Log.Information("this is the http request details => {@apiResponse}", apiResponse);
 
             switch(apiResponse.StatusCode)
             {
@@ -63,20 +65,22 @@ public class BaseService : IBaseService
                     try
                     {
                         var apiResult = JsonConvert.DeserializeObject<Dictionary<string, object>>(apiContent);
+                        Log.Information("this is the http apiResult => {@apiResult}", apiResult);
                         var apiResponseDTO = new ResponseDTO
                         {
                             Result = apiResult,
-                            IsSuccess = true, // Set this based on your requirements
+                            IsSuccess = true,
                         };
                         return apiResponseDTO;
                     }
                     catch(Exception ex)
                     {
                         var apiResult = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(apiContent);
+                        Log.Information("this is the http apiResult => {@apiResult}", apiResult);
                         var apiResponseDTO = new ResponseDTO
                         {
                             Result = apiResult,
-                            IsSuccess = true, // Set this based on your requirements
+                            IsSuccess = true,
                         };
                         return apiResponseDTO;
                     }
@@ -89,6 +93,7 @@ public class BaseService : IBaseService
                 IsSuccess = false,
                 Message = ex.InnerException?.Message ?? ex.Message
             };
+            Log.Information("this is the exception => {@DTO}", DTO);
             return DTO;
         }
     }
