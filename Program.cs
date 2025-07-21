@@ -1,5 +1,7 @@
+using EvoTicketingGRPC;
 using Serilog;
 using TheTicketShop.IService;
+using TheTicketShop.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,13 @@ builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Host.UseSerilog();
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
+builder.Services.AddScoped<TicketService>();
+
+builder.Services.AddGrpcClient<TicketingService.TicketingServiceClient>(o =>
+{
+    o.Address = new Uri("https://localhost:7206");
+});
 
 var app = builder.Build();
 
