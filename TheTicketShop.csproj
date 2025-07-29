@@ -19,6 +19,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="9.7.0" />
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />
     <PackageReference Include="serilog" Version="3.1.1" />
     <PackageReference Include="serilog.aspnetcore" Version="8.0.1" />
