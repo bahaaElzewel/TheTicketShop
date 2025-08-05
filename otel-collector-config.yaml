@@ -1,0 +1,38 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  # Traces → HTTP ingest on port 18888
+  otlphttp/aspire:
+    endpoint: "http://aspire-dashboard:18889"
+    tls:
+      insecure: true
+    headers: {Content-Type: "application/x-protobuf"}
+    compression: gzip
+
+  # Metrics & Logs → gRPC ingest on port 18889
+  otlp/aspire:  # Metrics & Logs (gRPC)
+    endpoint: "aspire-dashboard:18889"
+    tls:
+      insecure: true
+
+  debug: {}
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [debug, otlphttp/aspire]
+
+    metrics:
+      receivers: [otlp]
+      exporters: [debug, otlp/aspire]
+
+    logs:
+      receivers: [otlp]
+      exporters: [debug, otlp/aspire]
