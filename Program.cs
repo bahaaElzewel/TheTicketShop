@@ -5,7 +5,6 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
 using TheTicketShop.IService;
-using TheTicketShop.Middlewares;
 using TheTicketShop.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
+    .Enrich.WithProperty("ServiceName", "TheTicketShop")
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 
@@ -34,7 +34,7 @@ builder.Services.AddOpenTelemetry()
 {
     tracing
         .AddAspNetCoreInstrumentation()
-        .AddGrpcClientInstrumentation()
+        .AddGrpcClientInstrumentation() // gRPC only provide traces, not metrics
         .AddHttpClientInstrumentation()
         .AddEntityFrameworkCoreInstrumentation();
     tracing.AddOtlpExporter(options =>
@@ -69,8 +69,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseMiddleware<LogEnrichmentMiddleware>();
 
 app.UseSerilogRequestLogging();
 
