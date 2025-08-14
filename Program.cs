@@ -24,7 +24,8 @@ builder.Services.AddOpenTelemetry()
 {
     metrics
         .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation();
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation();
     metrics.AddOtlpExporter(options =>
     {
         options.Endpoint = new Uri("http://localhost:18890");
